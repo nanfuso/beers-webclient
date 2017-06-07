@@ -1,0 +1,8 @@
+<h1>New Beer</h1>
+
+<%= form_tag "/beers", method: :post do %>
+    <div>Name: <input type="text" name="name"></div>
+    <div>Style: <input type="text" name="style"></div>
+    <div>IBU: <input type="text" name="ibu"></div>
+    <input type="submit" value="Create New Beer">
+<% end %>
