@@ -1,6 +1,6 @@
 class BeersController < ApplicationController
     def index
-        @beers = Unirest.get('localhost:3000/api/v1/beers.json').body
+        @beers = Beer.all
     end
 
     def new
@@ -8,15 +8,28 @@ class BeersController < ApplicationController
 
     def create
         beer = Unirest.post(
-                                "localhost:3000/api/v1/beers.json?name=#{params[:name]}&style=#{params[:style]}&ibu=#{params[:ibu]}",
+                                "#{ ENV["API_HOST"] }/api/v1/beers.json",
                                 headers: {
                                             "Accept" => "application/json"
+                                        },
+                                parameters: {
+                                            name: params[:name],
+                                            style: params[:style],
+                                            ibu: params[:ibu]
                                         }
                                 ).body
         redirect_to "/beers/#{beer["id"]}"
     end
 
     def show
-        @beer = Unirest.get("localhost:3000/api/v1/beers/#{params[:id]}.json").body
+        @beer = Beer.find(params[:id])
+    end
+
+    def destroy
+        Unirest.delete( "#{ ENV["API_HOST"] }/api/v1/beers.json",
+                        headers: { "Accept" => "application/json"},
+
+                         )
+        redirect_to '/beers'
     end
 end
